@@ -966,11 +966,14 @@ static inline void onGlobalThreadAsync(void (^block)(void)) {
 }
 
 - (NSArray *)visibleDanmakuAgents {
-    __block NSArray *renderingDanmakus = nil;
-    dispatch_sync(_renderQueue, ^{
-        renderingDanmakus = [NSArray arrayWithArray:self.renderingDanmakus];
-    });
-    return renderingDanmakus;
+    @synchronized (self) {
+        return [NSArray arrayWithArray:self.renderingDanmakus];
+    }
+//    __block NSArray *renderingDanmakus = nil;
+//    dispatch_sync(_renderQueue, ^{
+//        renderingDanmakus = [NSArray arrayWithArray:self.renderingDanmakus];
+//    });
+//    return renderingDanmakus;
 }
 
 @end
